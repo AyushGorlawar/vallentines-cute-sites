@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise Day - A Promise of Forever</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Cormorant+Garamond:ital@0;1&family=Poppins:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #d4405f;
+            --secondary: #8b3a4e;
+            --accent: #f4b5d4;
+            --light: #fef5f0;
+            --dark: #2a1a1f;
+            --gold: #d4af7a;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: linear-gradient(135deg, #fef5f0 0%, #f9e8f0 100%);
+            color: var(--dark);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Animated background elements */
+        .bg-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .floating-heart {
+            position: absolute;
+            font-size: 3rem;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .heart-1 { top: 10%; left: 5%; animation-delay: 0s; }
+        .heart-2 { top: 60%; right: 5%; animation-delay: 1s; }
+        .heart-3 { top: 30%; right: 10%; animation-delay: 2s; }
+        .heart-4 { top: 70%; left: 10%; animation-delay: 1.5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 60px 20px 40px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .date-label {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            font-weight: 300;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 15px;
+            letter-spacing: -2px;
+        }
+
+        .subtitle {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            color: var(--secondary);
+            font-weight: 300;
+            margin-bottom: 30px;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Shayri Section */
+        .shayri-section {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            padding: 60px 40px;
+            margin: 50px auto;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(212, 64, 95, 0.2);
+            animation: fadeInUp 1s ease-out 0.3s both;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+        }
+
+        .shayri-label {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .shayri-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.9rem;
+            color: var(--dark);
+            line-height: 1.8;
+            margin: 30px 0;
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        .shayri-urdu {
+            font-size: 2.2rem;
+            color: var(--primary);
+            line-height: 2;
+            margin: 40px 0;
+            font-weight: 300;
+        }
+
+        /* Promise Box */
+        .promise-box {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 50px 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 50px 0;
+            animation: fadeInUp 1s ease-out 0.6s both;
+            box-shadow: 0 30px 60px rgba(212, 64, 95, 0.3);
+        }
+
+        .promise-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            letter-spacing: -1px;
+        }
+
+        .promise-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            font-weight: 300;
+            margin-bottom: 30px;
+        }
+
+        .promise-list {
+            text-align: left;
+            display: inline-block;
+            margin-top: 30px;
+        }
+
+        .promise-item {
+            font-size: 1rem;
+            margin: 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .promise-item::before {
+            content: "♥";
+            font-size: 1.3rem;
+            display: inline-block;
+        }
+
+        /* Cards Section */
+        .cards-section {
+            margin: 80px 0 60px;
+            animation: fadeInUp 1s ease-out 0.9s both;
+        }
+
+        .cards-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 50px;
+            letter-spacing: -1px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(212, 64, 95, 0.3);
+            border-radius: 15px;
+            padding: 35px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        .card:hover::before {
+            left: 0;
+        }
+
+        .card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 60px rgba(212, 64, 95, 0.25);
+            border-color: var(--primary);
+        }
+
+        .card:hover .card-title,
+        .card:hover .card-emoji {
+            color: white;
+        }
+
+        .card:hover .card-subtitle {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .card-emoji {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            display: block;
+            transition: all 0.4s ease;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+            transition: all 0.4s ease;
+            font-weight: 700;
+        }
+
+        .card-subtitle {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.8rem;
+            color: var(--secondary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 300;
+            transition: all 0.4s ease;
+        }
+
+        /* Modal/Popup */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            animation: fadeIn 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #fef5f0 0%, #f9e8f0 100%);
+            padding: 50px 45px;
+            border-radius: 20px;
+            max-width: 650px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 30px 100px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.4s ease;
+            border: 3px solid var(--primary);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-emoji {
+            font-size: 4.5rem;
+            text-align: center;
+            margin-bottom: 20px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 25px;
+            letter-spacing: -1px;
+        }
+
+        .modal-message {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            color: var(--dark);
+            line-height: 2;
+            text-align: center;
+            margin-bottom: 35px;
+            font-weight: 300;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 2.5rem;
+            cursor: pointer;
+            color: var(--primary);
+            transition: all 0.3s ease;
+            background: none;
+            border: none;
+        }
+
+        .close-btn:hover {
+            transform: scale(1.2);
+            color: var(--secondary);
+        }
+
+        .modal-button {
+            display: block;
+            margin: 0 auto;
+            padding: 13px 45px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .modal-button:hover {
+            transform: scale(1.08);
+            box-shadow: 0 15px 35px rgba(212, 64, 95, 0.4);
+        }
+
+        /* Message Section */
+        .message-section {
+            text-align: center;
+            padding: 70px 20px;
+            animation: fadeInUp 1s ease-out 1.1s both;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            margin: 60px 0;
+        }
+
+        .message-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.2rem;
+            color: var(--primary);
+            margin-bottom: 30px;
+            letter-spacing: -1px;
+        }
+
+        .message-text {
+            font-size: 1.35rem;
+            line-height: 2;
+            color: var(--dark);
+            max-width: 800px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 50px 20px;
+            border-top: 2px solid rgba(212, 64, 95, 0.2);
+            margin-top: 60px;
+            animation: fadeInUp 1s ease-out 1.3s both;
+        }
+
+        .footer-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            color: var(--secondary);
+            margin: 10px 0;
+            font-weight: 300;
+        }
+
+        .heart-icon {
+            display: inline-block;
+            color: var(--primary);
+            font-size: 1.2rem;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* Responsive - Tablet */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 3rem;
+            }
+
+            .shayri-section {
+                padding: 40px 25px;
+                margin: 30px 0;
+            }
+
+            .shayri-text {
+                font-size: 1.5rem;
+            }
+
+            .shayri-urdu {
+                font-size: 1.8rem;
+            }
+
+            .promise-box {
+                padding: 35px 25px;
+            }
+
+            .cards-section h2 {
+                font-size: 2.2rem;
+            }
+
+            .card {
+                padding: 30px 20px;
+            }
+
+            .card-emoji {
+                font-size: 3.5rem;
+            }
+
+            .card-title {
+                font-size: 1.4rem;
+            }
+
+            .message-section h2 {
+                font-size: 2.2rem;
+            }
+
+            .message-text {
+                font-size: 1.1rem;
+                line-height: 1.8;
+            }
+
+            .modal-content {
+                padding: 40px 30px;
+                max-width: 90%;
+            }
+
+            .modal-title {
+                font-size: 1.8rem;
+            }
+
+            .modal-message {
+                font-size: 1.2rem;
+                line-height: 1.8;
+            }
+        }
+
+        /* Mobile Phone Optimization */
+        @media (max-width: 600px) {
+            * {
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            body {
+                font-size: 14px;
+            }
+
+            header {
+                padding: 40px 15px 25px;
+            }
+
+            .date-label {
+                font-size: 0.75rem;
+                letter-spacing: 2px;
+                margin-bottom: 8px;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+                margin-bottom: 10px;
+                letter-spacing: -1px;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+                margin-bottom: 20px;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            /* Shayri Section - Mobile */
+            .shayri-section {
+                padding: 35px 20px;
+                margin: 25px 0;
+                border-radius: 12px;
+                border: 2px solid rgba(212, 64, 95, 0.25);
+            }
+
+            .shayri-label {
+                font-size: 0.75rem;
+                letter-spacing: 1.5px;
+                margin-bottom: 15px;
+            }
+
+            .shayri-text {
+                font-size: 1.2rem;
+                line-height: 1.6;
+                margin: 20px 0;
+            }
+
+            .shayri-urdu {
+                font-size: 1.5rem;
+                line-height: 1.8;
+                margin: 25px 0;
+            }
+
+            /* Promise Box - Mobile */
+            .promise-box {
+                padding: 30px 20px;
+                margin: 35px 0;
+                border-radius: 12px;
+            }
+
+            .promise-title {
+                font-size: 1.8rem;
+                margin-bottom: 20px;
+            }
+
+            .promise-text {
+                font-size: 1rem;
+                line-height: 1.6;
+                margin-bottom: 25px;
+            }
+
+            .promise-item {
+                font-size: 0.95rem;
+                margin: 10px 0;
+                gap: 12px;
+            }
+
+            .promise-item::before {
+                font-size: 1.1rem;
+            }
+
+            /* Cards Section - Mobile */
+            .cards-section {
+                margin: 50px 0 40px;
+            }
+
+            .cards-section h2 {
+                font-size: 1.8rem;
+                margin-bottom: 35px;
+            }
+
+            .cards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 18px;
+                margin-bottom: 25px;
+            }
+
+            .card {
+                padding: 25px 15px;
+                border-radius: 12px;
+                border: 2px solid rgba(212, 64, 95, 0.3);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+                min-height: 180px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .card-emoji {
+                font-size: 2.8rem;
+                margin-bottom: 12px;
+                animation: bounce 2s ease-in-out infinite;
+            }
+
+            .card-title {
+                font-size: 1.1rem;
+                margin-bottom: 8px;
+            }
+
+            .card-subtitle {
+                font-size: 0.7rem;
+                letter-spacing: 0.5px;
+            }
+
+            /* Message Section - Mobile */
+            .message-section {
+                padding: 45px 18px;
+                margin: 40px 0;
+                border-radius: 12px;
+            }
+
+            .message-section h2 {
+                font-size: 1.9rem;
+                margin-bottom: 20px;
+            }
+
+            .message-text {
+                font-size: 1.1rem;
+                line-height: 1.8;
+                max-width: 100%;
+            }
+
+            /* Modal - Mobile */
+            .modal {
+                padding: 15px;
+            }
+
+            .modal-content {
+                padding: 35px 25px;
+                border-radius: 15px;
+                max-width: 100%;
+                width: calc(100% - 30px);
+                border: 3px solid var(--primary);
+            }
+
+            .modal-emoji {
+                font-size: 3.5rem;
+                margin-bottom: 15px;
+            }
+
+            .modal-title {
+                font-size: 1.6rem;
+                margin-bottom: 18px;
+            }
+
+            .modal-message {
+                font-size: 1.15rem;
+                line-height: 1.7;
+                margin-bottom: 25px;
+            }
+
+            .close-btn {
+                top: 15px;
+                right: 18px;
+                font-size: 2rem;
+            }
+
+            .modal-button {
+                padding: 12px 35px;
+                font-size: 0.95rem;
+            }
+
+            /* Footer - Mobile */
+            footer {
+                padding: 35px 15px;
+                margin-top: 40px;
+            }
+
+            .footer-text {
+                font-size: 0.95rem;
+                margin: 8px 0;
+            }
+
+            .heart-icon {
+                font-size: 1rem;
+            }
+
+            /* Smooth scrolling for mobile */
+            html {
+                scroll-behavior: smooth;
+            }
+        }
+
+        /* Extra Small Phones */
+        @media (max-width: 400px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 15px;
+            }
+
+            .card {
+                padding: 20px 12px;
+                min-height: 160px;
+            }
+
+            .card-emoji {
+                font-size: 2.4rem;
+            }
+
+            .card-title {
+                font-size: 1rem;
+            }
+
+            .shayri-urdu {
+                font-size: 1.3rem;
+            }
+
+            .promise-title {
+                font-size: 1.5rem;
+            }
+
+            .message-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .modal-content {
+                padding: 30px 20px;
+            }
+
+            .modal-title {
+                font-size: 1.4rem;
+            }
+
+            .modal-message {
+                font-size: 1.05rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-decoration">
+        <div class="floating-heart heart-1">💝</div>
+        <div class="floating-heart heart-2">💕</div>
+        <div class="floating-heart heart-3">💗</div>
+        <div class="floating-heart heart-4">💓</div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="date-label">5th February</div>
+            <h1>Promise Day</h1>
+            <p class="subtitle">A promise to cherish you forever</p>
+        </header>
+
+        <!-- Shayri Section -->
+        <div class="shayri-section">
+            <div class="shayri-label">✨ A Promise Wrapped in Words ✨</div>
+            
+            <div class="shayri-urdu">
+                तुम्हारा साथ हमारी खुशी,<br>
+                तुम्हारी मुस्कान हमारी ज़िंदगी,<br>
+                हम वादा करते हैं तुम्हारा साथ निभाएँगे,<br>
+                जीवन भर तुम्हें अपना बनाए रखेंगे।
+            </div>
+
+            <div class="shayri-text">
+                "You are my joy, my light, my reason to smile—<br>
+                I promise to hold you close through every mile,<br>
+                In my heart, you'll forever stay,<br>
+                Today and always, come what may."
+            </div>
+        </div>
+
+        <!-- Promise Box -->
+        <div class="promise-box">
+            <h3 class="promise-title">My Promise to You</h3>
+            <p class="promise-text">
+                On this special day, I want to promise you everything my heart holds dear...
+            </p>
+            <div class="promise-list">
+                <div class="promise-item">To always be there for you, in joy and sorrow</div>
+                <div class="promise-item">To cherish every moment we share together</div>
+                <div class="promise-item">To support your dreams and celebrate your victories</div>
+                <div class="promise-item">To love you with all my heart, today and forever</div>
+                <div class="promise-item">To be your strength when you feel weak</div>
+                <div class="promise-item">To value you more than anything in this world</div>
+            </div>
+        </div>
+
+        <!-- Interactive Cards Section -->
+        <div class="cards-section">
+            <h2>Click to Reveal My Love 💝</h2>
+            <div class="cards-grid">
+                <!-- Card 1 -->
+                <div class="card" onclick="openModal(0)">
+                    <span class="card-emoji">💕</span>
+                    <h3 class="card-title">Your Smile</h3>
+                    <p class="card-subtitle">Click to read</p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="card" onclick="openModal(1)">
+                    <span class="card-emoji">✨</span>
+                    <h3 class="card-title">Your Presence</h3>
+                    <p class="card-subtitle">Click to read</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="card" onclick="openModal(2)">
+                    <span class="card-emoji">🌹</span>
+                    <h3 class="card-title">Your Love</h3>
+                    <p class="card-subtitle">Click to read</p>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="card" onclick="openModal(3)">
+                    <span class="card-emoji">💫</span>
+                    <h3 class="card-title">Your Trust</h3>
+                    <p class="card-subtitle">Click to read</p>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="card" onclick="openModal(4)">
+                    <span class="card-emoji">🎁</span>
+                    <h3 class="card-title">Your Happiness</h3>
+                    <p class="card-subtitle">Click to read</p>
+                </div>
+
+                <!-- Card 6 -->
+                <div class="card" onclick="openModal(5)">
+                    <span class="card-emoji">💖</span>
+                    <h3 class="card-title">Forever Promise</h3>
+                    <p class="card-subtitle">Click to read</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Message Section -->
+        <div class="message-section">
+            <h2>You Mean Everything to Me</h2>
+            <p class="message-text">
+                You are the reason my heart smiles, the person who makes every day special. 
+                On Promise Day, I want you to know that every promise I make is sealed with 
+                the deepest love and genuine devotion. You are not just my love—you are my 
+                forever promise.
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p class="footer-text">
+                <span class="heart-icon">❤️</span> Happy Promise Day <span class="heart-icon">❤️</span>
+            </p>
+            <p class="footer-text">With all my love and forever promises</p>
+        </footer>
+    </div>
+
+    <!-- Modal -->
+    <div id="messageModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <div class="modal-emoji" id="modalEmoji">💕</div>
+            <h3 class="modal-title" id="modalTitle">Your Love</h3>
+            <p class="modal-message" id="modalMessage">
+                This is a special message for you.
+            </p>
+            <button class="modal-button" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        const messages = [
+            {
+                title: "Your Smile",
+                emoji: "💕",
+                message: "Your smile is my favorite thing in the world. It brightens even my darkest days and fills my heart with endless joy. Every time I see you smile, I fall in love all over again."
+            },
+            {
+                title: "Your Presence",
+                emoji: "✨",
+                message: "When you're with me, the whole world fades away. Your presence is a blessing that makes every moment meaningful. I promise to cherish you always and never let you feel alone."
+            },
+            {
+                title: "Your Love",
+                emoji: "🌹",
+                message: "Your love is the greatest gift I could ever receive. It fills my life with colors I never knew existed. I promise to protect this precious love and nurture it with all my heart."
+            },
+            {
+                title: "Your Trust",
+                emoji: "💫",
+                message: "The trust you place in me is sacred. I promise to be worthy of every ounce of faith you have in me. Your trust is my responsibility and my honor to keep forever."
+            },
+            {
+                title: "Your Happiness",
+                emoji: "🎁",
+                message: "Your happiness is my ultimate goal. Every decision I make, I think of what will make you smile and feel loved. I promise to do everything in my power to keep you happy and cherished."
+            },
+            {
+                title: "Forever Promise",
+                emoji: "💖",
+                message: "I promise to love you not just today, but forever. Through every season of life, I will be by your side. You are my forever, my always, my everything. This is my sacred promise to you."
+            }
+        ];
+
+        function openModal(index) {
+            const modal = document.getElementById('messageModal');
+            const message = messages[index];
+            
+            document.getElementById('modalEmoji').textContent = message.emoji;
+            document.getElementById('modalTitle').textContent = message.title;
+            document.getElementById('modalMessage').textContent = message.message;
+            
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('messageModal');
+            modal.classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('messageModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
