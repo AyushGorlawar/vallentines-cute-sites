@@ -8,3 +8,4 @@ Fun Valentine special web projects featuring romantic themed pages for different
 ## DAY 4 - Teddy Day - [View Link](https://ayushgorlawar.github.io/vallentines-cute-sites/Teddy-Day/)
 ## LOVE - I LOVE YOU - [View Link](https://ayushgorlawar.github.io/vallentines-cute-sites/Love-you/)
 ## DAY 5 - PROMISE Day - [View Link](https://ayushgorlawar.github.io/vallentines-cute-sites/Promise-Day/) 
+## DAY 6 - HUG Day - [View Link](https://ayushgorlawar.github.io/vallentines-cute-sites/Hug-Day/) 
